@@ -8,11 +8,15 @@ Reference_details=pd.read_csv('Reference_details.csv')
 files=list(Reference_details['fname'])
 
 html_path=r'C:\Users\Saranga\Desktop\Devopedia\Work\articleRefs.v2525\html_output'
-csv_file_outputs_dir=r'C:\Users\Saranga\Desktop\Devopedia\Work\Devopedia\csv_outputs_from_HTML'
+csv_file_outputs_dir=r'C:\Users\Saranga\Desktop\Devopedia\Work\Devopedia\csv_outputs_from_HTML3'
+
 
 ignore_tags=['script','meta','link','button','svg','img','style','code','nav','figure']
 
 
+
+text_special_char_check=re.compile('[^a-zA-Z0-9"]')
+tag_special_char_check=re.compile('[^a-zA-Z0-9]')
 error_count=0
 error_indices=[]
 
@@ -28,7 +32,7 @@ for index,f_name in tqdm(enumerate(files)):
                 file=f.read()
                 soup=BS(file)
         except:
-            with open(os.path.join(html_path,f_name),encoding='iso-8859-1') as f:             #files which can be read using default encoding
+            with open(os.path.join(html_path,f_name),encoding='iso-8859-1') as f:             
                 file=f.read()
                 soup=BS(file)
 
@@ -36,13 +40,31 @@ for index,f_name in tqdm(enumerate(files)):
 
         for tag in soup.find_all():
 
-            if tag.name in ignore_tags:
+            name=tag.name
+            
+            if name in ignore_tags or (tag_special_char_check.search(name)!=None): #exclude tags having special characters 
                 continue
 
-            text=re.sub('\n',' ',tag.text)
-                                 
+            text=tag.text
+            
+            
+            
+            text=text.strip() 
 
-            text=re.sub('[^\w ]','',text)                   #No special characters allowed (done for authors while encoding also)
+            if text=='':
+                continue
+
+            if text.startswith('https') or text.startswith('http') or text.startswith('Fig'):
+                continue
+
+            if text[0].isdigit():
+                continue
+            
+            if text_special_char_check.search(text[0]) is not None: #exclude texts starting with a special char (except ")") 
+                    continue
+                    
+            text=re.sub('\n',' ',tag.text)
+                                                
             text=text.strip()
             text=re.sub('\s+',' ',text)                       #Long white spaces replaced to single whie space
             
@@ -54,7 +76,7 @@ for index,f_name in tqdm(enumerate(files)):
 
 
             if text not in duplicates:
-                    tag_list.append(tag.name)
+                    tag_list.append(name)
                     text_list.append(text)
                     duplicates.add(text)
         
