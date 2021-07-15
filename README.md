@@ -8,7 +8,7 @@ Given a URL, parse the content and generate a reference in Chicago Manual of Sty
 1. dataprep.py
 <br>
 Command:
-python dataprep.py <<argument_csv_file_name>> <<batch_size_for processesing>>
+python dataprep.py argument_csv_file_name batch_size_for processesing
 
 Eg:<br>
 python dataprep.py inputs.csv 100
