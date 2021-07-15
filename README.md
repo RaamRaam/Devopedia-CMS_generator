@@ -18,6 +18,8 @@ inputs.csv must contain paths for html_folder, devopediaArticles.v2525.json and 
 Outputs:
 Will generate files_and_references.csv (not very necessary) and raw_dataset.csv.
 
+<hr>
+
 2. encodings.py
 
 Command:
