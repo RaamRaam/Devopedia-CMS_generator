@@ -26,7 +26,7 @@ if __name__=="__main__":
     url=input("Enter URL:\t")
     r = requests.get(url, allow_redirects=True)
     # filename = getFilename_fromCd(r.headers.get('content-disposition'))
-    open('LOL.html', 'wb').write(r.content)
+    #open('LOL.html', 'wb').write(r.content)
 
     source=requests.get(url).text
     soup=BeautifulSoup(source)
@@ -37,14 +37,15 @@ if __name__=="__main__":
     df=add_columns(df)
     X=df[['index','caps_count','first_token_upper','comma_percent','No_of_tokens','first_letter_upper']]
 
-    model=load_model('ANN_author')
+    model_path=input("Enter model path:\t")
+    model=load_model(model_path)
     y_preds = model.predict(X)
 
     df['preds']=y_preds
     x=np.argmax(y_preds)
     print(df.text[x])
 
-    df.to_csv('lol2.csv',index=False)
+    df.to_csv('url_tags_texts_preds.csv',index=False)
 
 
 
