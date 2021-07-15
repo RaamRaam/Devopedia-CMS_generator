@@ -7,7 +7,7 @@ Given a URL, parse the content and generate a reference in Chicago Manual of Sty
 
 1. dataprep.py
 <br>
-Command:
+Command:<br>
 python dataprep.py argument_csv_file_name batch_size_for processesing
 
 Eg:<br>
@@ -16,7 +16,7 @@ python dataprep.py inputs.csv 100
 Pre-requisite:<br>
 inputs.csv must contain paths for html_folder, devopediaArticles.v2525.json and meta.v2525.jl
 
-Outputs:
+Outputs:<br>
 Will generate files_and_references.csv (not very necessary) and raw_dataset.csv.
 
 <hr>
@@ -29,7 +29,7 @@ python encodings.py
 Pre-requisite:<br>
 Will ask for raw_dataset.csv path.
 
-Output:
+Output:<br>
 Will generate author.csv, title.csv, yop.csv and Author_encoded.csv, Title_encoded.csv and YoP_encoded.csv.
 <hr>
 
