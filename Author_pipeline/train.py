@@ -6,10 +6,6 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras import Model
-from sklearn.metrics import roc_curve
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import classification_report
-import matplotlib.pyplot as plt
 
 
 def add_layer(units):
@@ -20,21 +16,23 @@ if __name__ == "__main__":
 
     start_t=time.perf_counter()
 
-    print("\nRunning train.py...\n")
-
     cmdline_params = {rows[0]:rows[1] for rows in reader(open(sys.argv[1], 'r'))}
-
     train_path=cmdline_params['df_train']
-    
 
     X_train=pd.read_csv(train_path)
 
-    try:    
-        test_path=cmdline_params['df_test']
-        X_test=pd.read_csv(test_path)
-        y_test=X_test.pop("Author_Encoded")
-    except:
-        test_path=None
+    #Under/over sampling
+
+    # X_train0=X_train[X_train.Author_Encoded==0]
+    # X_train1=X_train[X_train.Author_Encoded==1]
+
+
+    # X_train1=pd.concat([X_train1]*10, ignore_index=True)
+    # X_train0=X_train0.sample(frac=0.4,random_state=7)
+
+
+    # X_train=pd.concat([X_train0,X_train1],ignore_index=True)
+    # X_train = X_train.sample(frac=1).reset_index(drop=True)
 
     
     negs=len(X_train[X_train.Author_Encoded==0])
@@ -47,6 +45,8 @@ if __name__ == "__main__":
     weight_for_1 = (1 / pos) * (total / 2.0)
 
     class_weight = {0: weight_for_0, 1: weight_for_1}
+
+    print(f"Class Weights:{class_weight}")
 
     y_train=X_train.pop("Author_Encoded")
 
@@ -78,73 +78,18 @@ if __name__ == "__main__":
 
     history=model.fit(X_train,y_train,batch_size=BS,epochs=EPOCHS,verbose=1,class_weight=class_weight)
 
-    try:
-        model_save_choice=cmdline_params['model_save_choice']
+    model_save_choice = str(sys.argv[2])
 
-        if model_save_choice=='yes':
-            model_name=cmdline_params['model_name']
-            model.save(model_name,save_format='tf')
+    if model_save_choice=='yes':
 
-            print(f"Model Saved as {model_name}")
+        model_name=str(sys.argv[3])
+        model.save(model_name,save_format='tf')
 
-        else:
-            print("Model not saved..")
-    except:
+        print(f"Model Saved as {model_name}")
+
+    else:
         print("Model not saved..")
 
     end_t=time.perf_counter()
 
-    #--------------------------------------------------------Model evaluation--------------------------------------------------------
-    if test_path is not None: 
-        print("Evaluation on test set:")
-        model.evaluate(X_test,y_test)
-        y_preds = model.predict(X_test)
-
-
-        #ROC curve
-        fpr, tpr, thresholds = roc_curve(y_test, y_preds)
-        gmeans = np.sqrt(tpr * (1-fpr))
-        # locate the index of the largest g-mean
-        ix = np.argmax(gmeans)
-        print('Best Threshold=%f, G-Mean=%.3f' % (thresholds[ix], gmeans[ix]))
-        # plot the roc curve for the model
-        plt.plot([0,1], [0,1], linestyle='--', label='No Skill')
-        plt.plot(fpr, tpr, marker='.', label='ANN')
-        plt.scatter(fpr[ix], tpr[ix], marker='o', color='black', label='Best')
-        # axis labels
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
-        plt.legend()
-        # show the plot
-        plt.show()
-
-        best_thresh=thresholds[ix]
-        predicted_categories = np.where(y_preds > best_thresh, 1, 0)
-        
-        true_categories = y_test
-
-        print("Confusion Matrix:\n")
-        print(confusion_matrix(predicted_categories, true_categories))
-
-        print("Classification Report:\n")
-        print(classification_report(predicted_categories, true_categories))
-        print(f"Best threshold obtained at:{best_thresh}")
-
-        end_t=time.perf_counter()
-        print(f"Program completed running in {(end_t-start_t)/60} minutes!\n")
-
-    else:
-        print(f"Program completed running in {(end_t-start_t)/60} minutes!\n")
-
-
-
-
-  
-
-
-
-    
-
-
-
-        
+    print(f"Program completed running in {(end_t-start_t)/60} minutes!\n")
