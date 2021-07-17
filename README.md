@@ -3,7 +3,7 @@
 Given a URL, parse the content and generate a reference in Chicago Manual of Style (CMS) format.
 
 
-### Author_Pipeline
+### Train_Pipeline
 
 
 python dataprep.py inputs.csv 100
