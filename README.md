@@ -6,9 +6,10 @@ Given a URL, parse the content and generate a reference in Chicago Manual of Sty
 ### Order of py files exection:
 
 
-python dataprep.py inputs.csv 100
-python encodings.py inputs.csv
-python featureprep.py inputs.csv
-python split.py inputs.csv
-python train.py inputs.csv
+python dataprep.py inputs.csv 100 <br>
+
+python encodings.py inputs.csv 
+python featureprep.py inputs.csv <br>
+python split.py inputs.csv <br>
+python train.py inputs.csv <br>
 
