@@ -14,6 +14,8 @@ python featureprep.py inputs.csv
 
 python split.py inputs.csv
 
+python additional_features_prep.py inputs.csv
+
 python train.py inputs.csv yes author_model
 
 python predict.py inputs.csv author_model
@@ -24,8 +26,10 @@ python predict.py inputs.csv author_model
 
 python url2file.py https://medium.com/analytics-vidhya/seq2seq-abstractive-summarization-using-lstm-and-attention-mechanism-code-da2e9c439711
 
-python tag_text_extract.py inputs.csv
+python dataprep.py inputs.csv
 
 python featureprep.py inputs.csv
+
+python additional_featureprep.py inputs.csv
 
 python predict.py inputs.csv Author_ANN
