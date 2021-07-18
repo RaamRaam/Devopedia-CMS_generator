@@ -12,14 +12,15 @@ if __name__ == "__main__":
     test_path=cmdline_params['file_df_features']
 
     data=pd.read_csv(test_path)
-
+    data=data[['index','caps_count','first_token_upper','comma_percent','No_of_tokens','first_letter_upper',
+    'Tag_label','Tag_weights']]
     model_path=str(sys.argv[2])
 
     model=load_model(model_path)
 
     y_preds = model.predict(data)
 
-    df=pd.read_csv(cmdline_params['file_df'])
+    df=pd.read_csv(cmdline_params['file_df_features'])
     df['preds']=y_preds
     x=np.argmax(y_preds)
     print(df.text[x])

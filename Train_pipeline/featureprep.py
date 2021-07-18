@@ -6,7 +6,7 @@ from feature_functions import *
 def featureprep_func(df_name):
     df=pd.read_csv(df_name)
     df=add_columns(df)
-    df=df[['index','fname','caps_count','first_token_upper','comma_percent','No_of_tokens','first_letter_upper','Author_Encoded']]
+    # df=df[['index','fname','caps_count','first_token_upper','comma_percent','No_of_tokens','first_letter_upper','Author_Encoded']]
     df.to_csv(f'features_{df_name}',index=False)
 
 

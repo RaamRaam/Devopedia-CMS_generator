@@ -4,7 +4,6 @@ from feature_functions import *
 def featureprep_func(df_name):
     df=pd.read_csv(df_name)
     df=add_columns(df)
-    df=df[['index','caps_count','first_token_upper','comma_percent','No_of_tokens','first_letter_upper']]
     df.to_csv(cmdline_params['file_df_features'],index=False)
 
 

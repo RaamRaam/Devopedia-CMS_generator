@@ -8,8 +8,10 @@ from tensorflow.keras import layers
 from tensorflow.keras import Model
 
 
-def add_layer(units):
-    return layers.Dense(units,activation="relu")
+# def add_layer(units):
+#     return layers.Dense(units,activation="relu")
+
+add_layer=lambda units: layers.Dense(units,activation='relu')
     
 
 if __name__ == "__main__":
@@ -20,6 +22,11 @@ if __name__ == "__main__":
     train_path=cmdline_params['df_train']
 
     X_train=pd.read_csv(train_path)
+
+    X_train=X_train[['index','caps_count','first_token_upper','comma_percent','No_of_tokens','first_letter_upper',
+                    'Tag_label','Tag_weights','Author_Encoded']]
+
+    print(X_train.info())
 
     #Under/over sampling
 

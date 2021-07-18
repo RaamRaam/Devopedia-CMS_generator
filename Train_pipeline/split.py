@@ -12,13 +12,11 @@ def train_test_split(df,df_name):
 
     df_test= df[df.fname.isin(test_split)]
     df_test.reset_index(inplace=True,drop=True)
-    df_test=df_test[['index','caps_count','first_token_upper','comma_percent','No_of_tokens','first_letter_upper','Author_Encoded']]
     df_test.to_csv(f'test_{df_name}',index=False)
     print('Test dataframe created!')
 
     df_train=df[~df.fname.isin(test_split)]
     df_train.reset_index(inplace=True,drop=True)
-    df_train=df_train[['index','caps_count','first_token_upper','comma_percent','No_of_tokens','first_letter_upper','Author_Encoded']]
     df_train.to_csv(f'train_{df_name}',index=False)
     print('Train dataframe created!')
 

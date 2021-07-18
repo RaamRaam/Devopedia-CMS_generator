@@ -6,6 +6,7 @@ from sklearn.metrics import roc_curve,confusion_matrix,classification_report
 import matplotlib.pyplot as plt
 
 
+
 if __name__ == "__main__":
 
     print("\npredcit.py running...")
@@ -15,6 +16,8 @@ if __name__ == "__main__":
     test_path=cmdline_params['df_test']
 
     X_test=pd.read_csv(test_path)
+    X_test=X_test[['index','caps_count','first_token_upper','comma_percent','No_of_tokens','first_letter_upper',
+                    'Tag_label','Tag_weights','Author_Encoded']]
     y_test=X_test.pop("Author_Encoded")
 
     model_path=str(sys.argv[2])
