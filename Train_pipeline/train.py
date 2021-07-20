@@ -23,8 +23,8 @@ if __name__ == "__main__":
 
     X_train=pd.read_csv(train_path)
 
-    X_train=X_train[['index','caps_count','first_token_upper','comma_percent','No_of_tokens','first_letter_upper',
-                    'Tag_label','Tag_weights','Author_Encoded']]
+    X_train=X_train[['index','first_token_upper','comma_percent','No_of_tokens','first_letter_upper',
+                    'Tag_weights','Author_Encoded']]
 
     print(X_train.info())
 

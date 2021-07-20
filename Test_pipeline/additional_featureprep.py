@@ -1,6 +1,14 @@
 import pickle
 from libraries import *
 
+def log_index_weightage(x):
+    x=math.log(x,100) if x!=0 else 0
+    if x==0 or x==1:
+        return 0
+    if x>1:
+        return -(x-1)
+    return x
+
 if __name__=='__main__':
 
     start_t=time.perf_counter()
@@ -11,14 +19,13 @@ if __name__=='__main__':
     tags_without_author=tags_info['tags_without_author']
     tag_weights=tags_info['tag_weights']
 
-    log100=lambda x: math.log(x,100) if x!=0 else 0
 
     cmdline_params = {rows[0]:rows[1] for rows in reader(open(sys.argv[1], 'r'))}
     df=pd.read_csv(cmdline_params['file_df_features'])
     
 
 
-    df['index']=list(map(log100,(df['index'])))
+    df['index']=df['index'].apply(log_index_weightage)
     df['Tag_label']=df.tag.apply(lambda x: 1 if x in tags_with_author else( 0 if x in tags_without_author else -1))
     df['Tag_weights']=df.tag.apply(lambda x: tag_weights[x] if x in tag_weights else 0.0007)
 

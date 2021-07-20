@@ -9,12 +9,12 @@ text_special_char_check=re.compile('[^a-zA-Z0-9"]')
 tag_special_char_check=re.compile('[^a-zA-Z0-9]')
 
 exclude_tags=lambda el: not any([el.name in ignore_tags, tag_special_char_check.search(el.name)!=None])
-exclude_texts=lambda el: not any([ el.text.startswith(('http','Fig')),el.text.strip()=='', len(el.text)==0])
+exclude_texts=lambda el: not any([ el.text.startswith(('http','Fig')),el.text.strip()=='', len(el.text)==0,len(el.text)>500])
 check_first_char=lambda el: not any([el.text[0].isdigit(), text_special_char_check.search(el.text[0]) is not None])
 
 create_df=lambda f_name, el: pd.DataFrame([[index,f_name,i.name,
-                   re.sub('\"','',re.sub('\s+',' ',re.sub('\n',' ',i.text.strip())))[:1000],
-                   re.sub('\s+',' ',re.sub('\n',' ',i.text.lower().strip()))[:1000]] 
+                   re.sub('\"','',re.sub('\s+',' ',re.sub('\n',' ',i.text.strip()))),
+                   re.sub('\s+',' ',re.sub('\n',' ',i.text.lower().strip()))] 
                   for index,i in enumerate(el)], 
                  columns=['index','fname','tag','text','text4dup']).drop_duplicates(subset='text4dup', keep="first")
 

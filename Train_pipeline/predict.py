@@ -15,9 +15,9 @@ if __name__ == "__main__":
     cmdline_params = {rows[0]:rows[1] for rows in reader(open(sys.argv[1], 'r'))}
     test_path=cmdline_params['df_test']
 
-    X_test=pd.read_csv(test_path)
-    X_test=X_test[['index','caps_count','first_token_upper','comma_percent','No_of_tokens','first_letter_upper',
-                    'Tag_label','Tag_weights','Author_Encoded']]
+    df=pd.read_csv(test_path)
+    X_test=df[['index','first_token_upper','comma_percent','No_of_tokens','first_letter_upper',
+                    'Tag_weights','Author_Encoded']]
     y_test=X_test.pop("Author_Encoded")
 
     model_path=str(sys.argv[2])
@@ -47,7 +47,16 @@ if __name__ == "__main__":
 
     best_thresh=thresholds[ix]
     predicted_categories = np.where(y_preds > best_thresh, 1, 0)
-    
+
+    df_preds=df
+    df_preds.drop('Author_Encoded',axis=1,inplace=True)
+    df_preds['Ground_truths']=y_test
+    df_preds['Predictions']=predicted_categories
+    df_preds['Pred_proba']=y_preds
+
+    df_preds.to_csv("Test_Prediction_diagnostics.csv",index=False)
+    print("\nPrediction diagnostics created and saved!\n")
+
     true_categories = y_test
 
     print("Confusion Matrix:\n")

@@ -12,7 +12,15 @@ def check_tag_author_encoded(tag,ae,tags_with_author,tags_without_author_temp,ta
     else:
         tags_without_author_temp.add(tag)
 
-log100=lambda x: math.log(x,100) if x!=0 else 0
+def log_index_weightage(x):
+    x=math.log(x,100) if x!=0 else 0
+    if x==0 or x==1:
+        return 0
+    if x>1:
+        return -(x-1)
+    return x
+    
+
 
 
 if __name__=='__main__':
@@ -34,12 +42,13 @@ if __name__=='__main__':
 
     tags_without_author=tags_without_author_temp-tags_with_author
 
-    tag_counts=Counter(df_train.tag)
+    
+    total_tags_having_author_encoded=len(df_train[df_train.Author_Encoded==1])
 
     tag_weights=dict()
  
     for key,item in tag_author_count_dict.items(): 
-        tag_weights[key]=item/tag_counts[key]
+        tag_weights[key]=item/total_tags_having_author_encoded
 
     tags_info={
         'tags_with_author':tags_with_author,
@@ -50,11 +59,11 @@ if __name__=='__main__':
         pickle.dump(tags_info, f)
     print("Tag_info stored!")
 
-    df_train['index']=list(map(log100,(df_train['index'])))
+    df_train['index']=df_train['index'].apply(log_index_weightage)
     df_train['Tag_label']=df_train.tag.apply(lambda x: 1 if x in tags_with_author else 0)
     df_train['Tag_weights']=df_train.tag.apply(lambda x: tag_weights[x] if x in tag_weights else 0.0007)
 
-    df_test['index']=list(map(log100,(df_test['index'])))
+    df_test['index']=df_test['index'].apply(log_index_weightage)
     df_test['Tag_label']=df_test.tag.apply(lambda x: 1 if x in tags_with_author else( 0 if x in tags_without_author else -1))
     df_test['Tag_weights']=df_test.tag.apply(lambda x: tag_weights[x] if x in tag_weights else 0.0007)
 

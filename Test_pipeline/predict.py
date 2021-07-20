@@ -12,8 +12,7 @@ if __name__ == "__main__":
     test_path=cmdline_params['file_df_features']
 
     data=pd.read_csv(test_path)
-    data=data[['index','caps_count','first_token_upper','comma_percent','No_of_tokens','first_letter_upper',
-    'Tag_label','Tag_weights']]
+    data=data[['index','first_token_upper','comma_percent','No_of_tokens','first_letter_upper','Tag_weights']]
     model_path=str(sys.argv[2])
 
     model=load_model(model_path)
