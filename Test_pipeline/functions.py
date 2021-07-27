@@ -2,6 +2,16 @@ from libraries import *
 from functions import *
 
 
+def text_if_quote(text):
+    text=str(text)
+    if text[0]=="\"":
+        try:
+            return text[1]
+        except:
+            return text[0]
+    else:
+        return text[0]
+
 valid_str = lambda text: text.split(' Accessed')[0]
 
 ignore_tags=['script','meta','link','button','svg','img','style','code','nav','figure']    
@@ -10,7 +20,7 @@ tag_special_char_check=re.compile('[^a-zA-Z0-9]')
 
 exclude_tags=lambda el: not any([el.name in ignore_tags, tag_special_char_check.search(el.name)!=None])
 exclude_texts=lambda el: not any([ el.text.startswith(('http','Fig')),el.text.strip()=='', len(el.text)==0,len(el.text)>500])
-check_first_char=lambda el: not any([el.text[0].isdigit(), text_special_char_check.search(el.text[0]) is not None])
+check_first_char=lambda el: not any([el.text[0].isdigit(), text_special_char_check.search(text_if_quote(el.text))])
 
 create_df=lambda f_name, el: pd.DataFrame([[index,f_name,i.name,
                    re.sub('\"','',re.sub('\s+',' ',re.sub('\n',' ',i.text.strip()))),

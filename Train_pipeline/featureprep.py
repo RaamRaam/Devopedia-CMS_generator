@@ -51,21 +51,25 @@ def add_columns(df):
 
     return df
 
-def featureprep_func(df_name):
-    df=pd.read_csv(df_name)
+def featureprep_func(field):
+    cmdline_params = {rows[0]:rows[1] for rows in reader(open(sys.argv[1], 'r'))}
+    df=pd.read_csv(cmdline_params[f'{field}_encoded'])
     df=add_columns(df)
-    # df=df[['index','fname','caps_count','first_token_upper','comma_percent','No_of_tokens','first_letter_upper','Author_Encoded']]
-    df.to_csv(f'features_{df_name}',index=False)
+    df.to_csv(f'features_{field}_encoded.csv',index=False)
+    print(f"\nFeature columns added for {field}!\n")
 
 
 if __name__ == "__main__":
-    print("Featurepre.py running...\n\n")
+    print("Featureprep.py running...\n\n")
     start=time.perf_counter()
-    cmdline_params = {rows[0]:rows[1] for rows in reader(open(sys.argv[1], 'r'))}
+    
 
-    featureprep_func(cmdline_params['author_encoded'])
-    print("\nFeature columns added!\n")
-        
+    fields=['author','title','yop']
+    with concurrent.futures.ProcessPoolExecutor() as exc:
+        _=[exc.submit(featureprep_func,field) for field in fields]
+
+    print(_)
+
     end=time.perf_counter()
     
     print(f"Featureprep ran in {end-start} seconds!\n")

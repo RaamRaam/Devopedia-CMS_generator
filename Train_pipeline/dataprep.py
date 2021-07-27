@@ -51,7 +51,11 @@ if __name__ == "__main__":
         end = time.perf_counter()
         print(end - start)
         
+    final_df=final_df[final_df.text.notnull()]
+
     final_df.to_csv('raw_dataset.csv',index=False)
+
+    print(final_df.info())
 
     end_time=time.perf_counter()
 

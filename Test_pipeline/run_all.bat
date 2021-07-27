@@ -2,4 +2,4 @@ python url2file.py https://medium.com/analytics-vidhya/seq2seq-abstractive-summa
 python dataprep.py inputs.csv
 python featureprep.py inputs.csv
 python additional_featureprep.py inputs.csv
-python predict.py inputs.csv Author_ANN2
+python predict.py inputs.csv ANN

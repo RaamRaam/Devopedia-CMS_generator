@@ -28,6 +28,17 @@ if __name__=='__main__':
     df_name=cmdline_params['features_author_encoded']
     df=pd.read_csv(df_name)
     train_test_split(df,df_name)
+    print('Author split done!')
+
+    df_name=cmdline_params['features_title_encoded']
+    df=pd.read_csv(df_name)
+    train_test_split(df,df_name)
+    print('Title split done!')
+
+    df_name=cmdline_params['features_yop_encoded']
+    df=pd.read_csv(df_name)
+    train_test_split(df,df_name)
+    print('YoP split done!')
 
     end=time.perf_counter()
 

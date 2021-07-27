@@ -20,6 +20,12 @@ if __name__=="__main__":
     cmdline_params = {rows[0]:rows[1] for rows in reader(open(sys.argv[1], 'r'))}
     # df=input("Enter df path:\t")
     df=pd.read_csv(cmdline_params['raw_dataset'])
+
+    print(df.shape)
+    df=df[df.text.notnull()]
+    
+    df.reset_index(inplace=True,drop=True)
+    print(df.shape)
     
 
     temp_df = df.copy(deep=True)
