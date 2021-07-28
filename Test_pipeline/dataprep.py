@@ -1,5 +1,7 @@
 from libraries import *
 from functions import *
+import warnings
+warnings.filterwarnings("ignore")
 
 if __name__=="__main__":
     print("Extracting tags and texts from html file...\n")

@@ -3,3 +3,4 @@ python dataprep.py inputs.csv
 python featureprep.py inputs.csv
 python additional_featureprep.py inputs.csv
 python predict.py inputs.csv ANN
+python generate_ref_strings.py inputs.csv
