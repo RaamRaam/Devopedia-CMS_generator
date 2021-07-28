@@ -6,7 +6,7 @@ Given a URL, parse the content and generate a reference in Chicago Manual of Sty
 ### Train_Pipeline
 
 
-python dataprep.py inputs.csv <<<batch size for processing files>>>
+python dataprep.py inputs.csv (batch size for processing files)
 
 python encodings.py inputs.csv
 
@@ -24,7 +24,7 @@ python predict.py inputs.csv author_model
 
 ### Test_Pipeline
 
-python url2file.py <<<url>>>
+python url2file.py (url)
 
 python dataprep.py inputs.csv
 
