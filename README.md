@@ -6,7 +6,7 @@ Given a URL, parse the content and generate a reference in Chicago Manual of Sty
 ### Train_Pipeline
 
 
-python dataprep.py inputs.csv 100
+python dataprep.py inputs.csv <<batch size for processing files>>
 
 python encodings.py inputs.csv
 
@@ -24,7 +24,7 @@ python predict.py inputs.csv author_model
 
 ### Test_Pipeline
 
-python url2file.py https://medium.com/analytics-vidhya/seq2seq-abstractive-summarization-using-lstm-and-attention-mechanism-code-da2e9c439711
+python url2file.py <<url>>
 
 python dataprep.py inputs.csv
 
@@ -32,4 +32,6 @@ python featureprep.py inputs.csv
 
 python additional_featureprep.py inputs.csv
 
-python predict.py inputs.csv Author_ANN
+python predict.py inputs.csv ANN
+
+python generate_ref_strings.py inputs.csv
