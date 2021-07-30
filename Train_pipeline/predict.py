@@ -6,15 +6,14 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 from tensorflow.keras.models import load_model
 from sklearn.metrics import roc_curve,confusion_matrix,classification_report
 import matplotlib.pyplot as plt
-import swifter
-import spacy
-from spacy import displacy
-import en_core_web_sm
-nlp = en_core_web_sm.load()
 
-def spacy_ner(text):
-    doc = nlp(str(text))
-    return doc.ents
+# import swifter
+# import en_core_web_sm
+# nlp = en_core_web_sm.load()
+
+# def spacy_ner(text):
+#     doc = nlp(str(text))
+#     return doc.ents
 
 
 def prediction_stats(field,train_or_test):
@@ -28,7 +27,7 @@ def prediction_stats(field,train_or_test):
 
     df=pd.read_csv(path)
     X_test=df[['index','caps_count','first_token_upper','comma_percent','No_of_tokens','first_letter_upper',
-                    'Tag_weights',f'{field_encoding}']]
+                'year_presence','Tag_weights',f'{field_encoding}']]
     y_test=X_test.pop(f'{field_encoding}')
 
     model_path=str(sys.argv[2])
@@ -68,17 +67,17 @@ def prediction_stats(field,train_or_test):
     print(df_preds.shape)
     
 
-    if field=='author':
+    # if field=='author':
         
-        df_preds2=df_preds.loc[(df_preds.Predictions==1)]
-        print(df_preds2.shape)
+    #     df_preds2=df_preds.loc[(df_preds.Predictions==1)]
+    #     print(df_preds2.shape)
 
-        x=df_preds2['text'].swifter.apply(lambda x : 1 if spacy_ner(x) else 0)
-        df_preds['Preds_ner']=x
-        df_preds.Preds_ner.fillna(df_preds.Predictions, inplace=True)
-        df_preds['Preds_ner']=df_preds['Preds_ner'].astype('int')
-        df_preds['Predictions']=df_preds['Preds_ner']
-        del df_preds['Preds_ner']
+    #     x=df_preds2['text'].swifter.apply(lambda x : 1 if spacy_ner(x) else 0)
+    #     df_preds['Preds_ner']=x
+    #     df_preds.Preds_ner.fillna(df_preds.Predictions, inplace=True)
+    #     df_preds['Preds_ner']=df_preds['Preds_ner'].astype('int')
+    #     df_preds['Predictions']=df_preds['Preds_ner']
+    #     del df_preds['Preds_ner']
 
     df_preds2=df_preds.loc[(df_preds.Ground_truths==1) | (df_preds.Predictions==1)]  
     df_preds2.to_csv(f"{field}_{train_or_test}_Prediction_diagnostics.csv",index=False)

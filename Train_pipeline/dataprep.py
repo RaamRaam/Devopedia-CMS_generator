@@ -1,6 +1,8 @@
 from libraries import *
 from data_object import *
 from functions import *
+import warnings
+warnings.filterwarnings("ignore")
 
 if __name__ == "__main__":
 

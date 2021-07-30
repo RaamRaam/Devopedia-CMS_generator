@@ -38,19 +38,31 @@ text_to_vector = lambda el: re.compile(r'[^\W]+\b').findall(str(el).lower())
 encoded_files = lambda el: list(el[el['Author_Encoded']!=0].fname.unique())
 exact_match = lambda el: 1 if all([set(text_to_vector(el[0])).issubset(text_to_vector(el[1])),set(text_to_vector(el[1])).issubset(text_to_vector(el[0]))]) else 0
 exact_text = lambda el: 1 if set(text_to_vector(el[0])).issubset(text_to_vector(el[1])) else 0
-exact_label = lambda el: 1 if set(text_to_vector(el[1])).issubset(text_to_vector(el[0])) else 0
+exact_label_yop=lambda el: 1 if (set(text_to_vector(el[1])).issubset(text_to_vector(el[0]))) else 0
+exact_label = lambda el: 1 if ((set(text_to_vector(el[1])).issubset(text_to_vector(el[0])) and (len(text_to_vector(el[0]))<=len(text_to_vector(el[1]))+3))) else 0
 partial_match = lambda el: 1 if len(set(text_to_vector(el[1])).intersection(set(text_to_vector(el[0]))))/len(set(text_to_vector(el[0])))>0.5 else 0
+
+token_count=lambda el: 1 if (len(text_to_vector(el[0]))<=len(text_to_vector(el[1]))+3) else 0
 
 
 def get_encoded_df(df,field):
     df0=df
     df0[field+'_Encoded']=df0[['text',field]].apply(exact_match, axis=1)
     df1=df0[~df0['fname'].isin(list(df0[df0[field+'_Encoded']==1].fname.unique()))]
+
     df1[field+'_Encoded']=df1[['text',field]].apply(exact_text, axis=1)
     df2=df1[~df1['fname'].isin(list(df1[df1[field+'_Encoded']==1].fname.unique()))]
-    df2[field+'_Encoded']=df2[['text',field]].apply(exact_label, axis=1)
+
+    if field=='YoP':
+        print('inside YOP')
+        df2['YoP'+'_Encoded']=df2[['text','YoP']].apply(exact_label_yop, axis=1)
+    else:
+        df2[field+'_Encoded']=df2[['text',field]].apply(exact_label, axis=1)
+
     df3=df2[~df2['fname'].isin(list(df2[df2[field+'_Encoded']==1].fname.unique()))]
     df3[field+'_Encoded']=df3[['text',field]].apply(partial_match, axis=1)
+
+
     return pd.concat([df0[df0['fname'].isin(list(df0[df0[field+'_Encoded']==1].fname.unique()))],
              df1[df1['fname'].isin(list(df1[df1[field+'_Encoded']==1].fname.unique()))],
              df2[df2['fname'].isin(list(df2[df2[field+'_Encoded']==1].fname.unique()))],

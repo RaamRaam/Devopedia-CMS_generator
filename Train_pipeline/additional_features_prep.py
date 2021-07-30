@@ -59,7 +59,7 @@ def additional_feature_columns(field):
         pickle.dump(tags_info, f)
     print(f"{field} Tag_info stored!")
 
-    tag_weights_update=lambda x: ((x*100)**2)/100
+    tag_weights_update=lambda x: ((x*100)**2)/10000
 
     df_train['index']=df_train['index'].apply(log_index_weightage)
     df_train['Tag_label']=df_train.tag.apply(lambda x: 1 if x in tags_with_field else 0)
@@ -75,10 +75,6 @@ def additional_feature_columns(field):
 
     df_train.to_csv(cmdline_params[f'df_train_{field}'],index=False)
     df_test.to_csv(cmdline_params[f'df_test_{field}'],index=False)
-
-
-
-
 
 
 

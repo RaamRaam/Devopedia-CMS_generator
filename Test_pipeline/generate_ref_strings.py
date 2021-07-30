@@ -1,4 +1,4 @@
-from libraries import pd,reader,sys
+from libraries import pd,reader,sys,re
 
 def ref_string_generate(author,title,yop):
     return author+'. '+yop+'. "'+title+'"'
@@ -13,6 +13,13 @@ def entities_extraction(df_author,df_title,df_yop):
     title_preds=list(df_title.head(3).text)
     yop_preds=list(df_yop.head(3).text)
 
+    for i in range(len(yop_preds)):
+        try:
+            yop_preds[i]=re.search(r'\b\d{4}\b',yop_preds[i]).group()
+        except:
+            pass
+
+
     print("\nBased on top 3 indices:\n\n")
     print("Authors:\n")
     print_entities(author_preds)
@@ -21,8 +28,11 @@ def entities_extraction(df_author,df_title,df_yop):
     print("\n\nYoPs:\n")
     print_entities(yop_preds)
 
+
+    range_top=min(len(author_preds),len(title_preds),len(yop_preds))
+
     ref_strings_top3_indices=[]
-    for i in range(3):
+    for i in range(range_top):
         ref_strings_top3_indices.append(ref_string_generate(author_preds[i],title_preds[i],yop_preds[i]))
 
     print("\n\n Ref_strings from top 3 indices :\n")
@@ -36,6 +46,12 @@ def entities_extraction(df_author,df_title,df_yop):
     title_preds=list(df_title.head(3).text)
     yop_preds=list(df_yop.head(3).text)
 
+    for i in range(len(yop_preds)):
+        try:
+            yop_preds[i]=re.search(r'\b\d{4}\b',yop_preds[i]).group()
+        except:
+            pass
+
     print('-'*200)
 
     print("Based on top 3 prediction probabilities:\n\n")
@@ -46,8 +62,10 @@ def entities_extraction(df_author,df_title,df_yop):
     print("\n\nYoPs:\n")
     print_entities(yop_preds)
 
+    range_top=min(len(author_preds),len(title_preds),len(yop_preds))
+
     ref_strings_top3_probs=[]
-    for i in range(3):
+    for i in range(range_top):
         ref_strings_top3_probs.append(ref_string_generate(author_preds[i],title_preds[i],yop_preds[i]))
 
     print("\n\n Ref_strings from top 3 predcition_probabilities :\n")

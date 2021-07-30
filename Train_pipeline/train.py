@@ -8,7 +8,6 @@ from tensorflow.keras import layers
 from tensorflow.keras import Model
 import io
 
-
 add_layer=lambda units: layers.Dense(units,activation='relu')
 
 def get_model_summary(model):
@@ -31,7 +30,7 @@ def train_model(field):
     X_train=pd.read_csv(train_path)
 
     X_train=X_train[['index','caps_count','first_token_upper','comma_percent','No_of_tokens','first_letter_upper',
-                    'Tag_weights',f'{field_encoding}']]
+                    'year_presence','Tag_weights',f'{field_encoding}']]
 
     print(X_train.info())
 

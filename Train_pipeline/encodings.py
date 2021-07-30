@@ -61,10 +61,10 @@ if __name__=="__main__":
     author_encoded.to_csv('Author_encoded.csv',index=False)
 
 
-    title_encoded=pd.merge(title_df,temp_df,on=['index', 'fname'],how='left')
+    title_encoded=pd.merge(title_df,df,on=['index', 'fname'],how='left')
     title_encoded.to_csv('Title_encoded.csv',index=False)
  
-    yop_encoded=pd.merge(yop_df,temp_df, on=['index', 'fname'],how='left')
+    yop_encoded=pd.merge(yop_df,df, on=['index', 'fname'],how='left')
     yop_encoded.to_csv('YoP_encoded.csv',index=False)
 
     end_t=time.perf_counter()

@@ -42,12 +42,23 @@ def first_letter_upper(text):
     except:
         return 0
 
+def year_in_string(text):
+    text=str(text)
+    x=re.search(r'\b\d{4}\b',str(text))
+    if x:
+        x=x.group()
+        if x[0]=='1' or x[0]=='2':
+            return 1
+    return 0
+
+
 def add_columns(df):
     df['caps_count']=df.text.apply(caps)
     df['first_token_upper']=df.text.apply(first_token_upper)
     df['comma_percent']=df.text.apply(comma_percent)
     df['No_of_tokens']=df.text.apply(no_of_tokens)
     df['first_letter_upper']=df.text.apply(first_letter_upper)
+    df['year_presence']=df.text.apply(year_in_string)
 
     return df
 
