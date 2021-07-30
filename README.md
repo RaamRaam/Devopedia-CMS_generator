@@ -16,9 +16,15 @@ python split.py inputs.csv
 
 python additional_features_prep.py inputs.csv
 
-python train.py inputs.csv yes author_model
+python train.py inputs.csv yes ANN2
 
-python predict.py inputs.csv author_model
+python predict.py inputs.csv ANN2
+
+python cosine_similarity.py inputs.csv
+
+python aggregated_cosine_similarity.py inputs.csv
+
+
 
 <hr>
 
@@ -32,6 +38,6 @@ python featureprep.py inputs.csv
 
 python additional_featureprep.py inputs.csv
 
-python predict.py inputs.csv ANN
+python predict.py inputs.csv ANN2
 
 python generate_ref_strings.py inputs.csv
