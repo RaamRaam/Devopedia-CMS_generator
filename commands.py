@@ -28,13 +28,16 @@ elif sys.argv[1]=='preprocess':
         py5=os.path.join(pipeline_path, f"additional_features_prep.py {inputs}")
         py_files=[py1,py2,py3,py4,py5]
 
-    else:
+    elif train_or_test=='test':
         url=sys.argv[4]
         py1=os.path.join(pipeline_path,f"url2file.py {url}")
         py2=os.path.join(pipeline_path,f"dataprep.py {inputs}")
         py3=os.path.join(pipeline_path,f"featureprep.py {inputs}")
         py4=os.path.join(pipeline_path,f"additional_featureprep.py {inputs}")
         py_files=[py1,py2,py3,py4]
+    
+    else:
+        print("Invalid choice!!")
 
     
     for py_fname in py_files:
@@ -77,15 +80,29 @@ elif sys.argv[1]=='postprocess':
 
     if train_or_test=='train':
         py1=os.path.join(pipeline_path, f"predict.py {inputs} {model_name}")
-        os.system(f'python {py1}')
         py2=os.path.join(pipeline_path, f"cosine_similarity.py {inputs}")
-        os.system(f'python {py2}')
+        py3=os.path.join(pipeline_path, f"aggregated_cosine_similarity.py {inputs}")
+
+        py_files=[py1,py2,py3]
+
+    elif train_or_test=='test':
+        py1=os.path.join(pipeline_path, f"predict.py {inputs} {model_name}")
+        py2=os.path.join(pipeline_path, f"generate_ref_strings.py {inputs}")
+
+        py_files=[py1,py2]
+
+
+    else:
+        print("Invalid choice!!")
+
+    for py_fname in py_files:
+        os.system(f'python {py_fname}')
+
 
     end_t=time.perf_counter()
 
     print(f"{train_or_test} postprocessing done in {(end_t-start_t)/60} minutes.")
 
-    
 
 
 
