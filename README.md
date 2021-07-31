@@ -9,7 +9,7 @@ Master Commands to use pipelines
 python commands.py (url) (model_name)
 
 
-### For Preprocessing
+## For Preprocessing
 
 ### Preprocessing (Train pipeline)
 
@@ -18,6 +18,7 @@ python commands.py preprocess train inputs.csv (files_batch_size)
 ### Preprocessing (Test pipeline)
 
 python commands.py preprocess test inputs.csv (url)
+
 
 
 ## For Training
@@ -29,6 +30,7 @@ python commands.py train inputs.csv yes (model_name)
 ### Train without saving model
 
 python commands.py train inputs.csv no
+
 
 
 ## For Postprocessing
