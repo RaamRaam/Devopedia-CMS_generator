@@ -2,18 +2,18 @@ from libraries import *
 import pickle
 
 
-def check_tag_encoded(tag,ae,tags_with_field,tags_without_field_temp,tag_field_count_dict):
-    if ae==1:
-        tags_with_field.add(tag)
+def check_tag_encoded(tag, encoding, tags_with_field, tags_without_field_temp, tag_field_count_dict):
+    if encoding==1:
+        tags_with_field.add(tag)    
         if tag not in tag_field_count_dict:
-            tag_field_count_dict[tag]= tag_field_count_dict.get(tag, 0) + 1
+            tag_field_count_dict[tag]= tag_field_count_dict.get(tag, 0) + 1        
         else:
             tag_field_count_dict[tag]+=1
     else:
         tags_without_field_temp.add(tag)
 
 
-log_index_weightage=lambda x: 1/(math.exp(math.log(x+1,100)))
+log_index_weightage=lambda x: 1/(math.exp(math.log(x+1,100)))  #mathematical operation on index values (higher the index, lower the weightage)
 
 
 def additional_feature_columns(field):
@@ -24,14 +24,14 @@ def additional_feature_columns(field):
     df_test=pd.read_csv(cmdline_params[f'df_test_{field}'])
 
 
-    tags_with_field=set()
-    tags_without_field_temp=set()
-    tag_field_count_dict=dict()
+    tags_with_field=set()                #set of tags having encoding 1
+    tags_without_field_temp=set()       
+    tag_field_count_dict=dict()          #dictionary having tag and tag_counts having encoding 1
 
     if field=='yop':
-        field_encoding=field[0].upper()+field[1]+field[2].upper()+'_Encoded'  #from title/author to Title/Author_Encoded
+        field_encoding=field[0].upper()+field[1]+field[2].upper()+'_Encoded'  # title/author => Title/Author_Encoded
     else:
-        field_encoding=field[0].upper()+field[1:]+'_Encoded'            #from yop to YoP_Encoded
+        field_encoding=field[0].upper()+field[1:]+'_Encoded'            #from yop => YoP_Encoded
 
     
 
@@ -40,7 +40,7 @@ def additional_feature_columns(field):
         check_tag_encoded(df_train.tag[i],df_train[f'{field_encoding}'][i],
                              tags_with_field,tags_without_field_temp,tag_field_count_dict)
 
-    tags_without_field=tags_without_field_temp-tags_with_field
+    tags_without_field=tags_without_field_temp-tags_with_field      #set of tags having encoding 0
 
     
     total_tags_having_field_encoded=len(df_train[df_train[f'{field_encoding}']==1])
@@ -48,15 +48,16 @@ def additional_feature_columns(field):
     tag_weights=dict()
  
     for key,item in tag_field_count_dict.items(): 
-        tag_weights[key]=item/total_tags_having_field_encoded
+        tag_weights[key]=item/total_tags_having_field_encoded        #tag_weight=(frequency of the tag having_encoding 1)/(total tags having encoding 1)
 
     tags_info={
         f'tags_with_{field}':tags_with_field,
         f'tags_without_{field}':tags_without_field,
         f'tag_weights_{field}':tag_weights
     }
-    with open(cmdline_params[f'tags_info_{field}'], 'wb') as f: 
-        pickle.dump(tags_info, f)
+
+    with open(cmdline_params[f'tags_info_{field}'], 'wb') as f:          
+        pickle.dump(tags_info, f)                                       #saving pickle file for reuse in Test pipeline
     print(f"{field} Tag_info stored!")
 
     tag_weights_update=lambda x: ((x*100)**2)/10000

@@ -6,7 +6,7 @@ tag_weights_update=lambda x: ((x*100)**2)/100
 
 def add_features(field,df):
     with open(f'{field}_tags_info.pkl','rb') as f:  
-        tags_info = pickle.load(f)
+        tags_info = pickle.load(f)                   #using tag_weights already calculated in Train Pipeline
     tag_weights=tags_info[f'tag_weights_{field}']
 
     df[f'Tag_weights_{field}']=df.tag.apply(lambda x: tag_weights[x] if x in tag_weights else 0.0001)

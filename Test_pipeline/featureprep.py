@@ -1,6 +1,8 @@
 from libraries import *
 
 
+#same as in train_pipeline
+
 def token_list_create(text):
     token_list=re.findall(r'\w+', text)
     return token_list

@@ -15,9 +15,12 @@ def entities_extraction(df_author,df_title,df_yop):
 
     for i in range(len(yop_preds)):
         try:
-            yop_preds[i]=re.search(r'\b\d{4}\b',yop_preds[i]).group()
+            yop_preds[i]=re.search(r'\b\d{4}\b',yop_preds[i]).group()    #printing first 4-digit number 
         except:
             pass
+
+    remove_suffix=lambda el: re.search(r'([^|-]+)',el).group().strip()     # Considering part of text before - or |
+    title_preds=list(map(remove_suffix,title_preds))
 
 
     print("\nBased on top 3 indices:\n\n")
@@ -48,9 +51,13 @@ def entities_extraction(df_author,df_title,df_yop):
 
     for i in range(len(yop_preds)):
         try:
-            yop_preds[i]=re.search(r'\b\d{4}\b',yop_preds[i]).group()
+            yop_preds[i]=re.search(r'\b\d{4}\b',yop_preds[i]).group()  #printing first 4-digit number
         except:
             pass
+
+    remove_suffix=lambda el: re.search(r'([^|-]+)',el).group().strip()     # Considering part of text before - or |
+    title_preds=list(map(remove_suffix,title_preds))
+
 
     print('-'*200)
 

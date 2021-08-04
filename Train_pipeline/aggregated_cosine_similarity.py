@@ -2,7 +2,7 @@ from os import startfile
 from libraries import *
 from cosine_similarity import cosine_similarity_value
 
-def cosine_simi(df,field):
+def cosine_simi(df,field):       #return key of a dictionary having a certain value
     def get_key(val,dicto):
         for key, value in dicto.items():
              if val == value:
@@ -63,6 +63,7 @@ def aggregate(field,train_or_test,criterion):
     
 
 if __name__=='__main__':
+    print("Running aggregated_cosine_similarity.py...")
 
     start_t=time.perf_counter()
     cmdline_params = {rows[0]:rows[1] for rows in reader(open(sys.argv[1], 'r'))}

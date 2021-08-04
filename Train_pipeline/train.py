@@ -10,7 +10,7 @@ import io
 
 add_layer=lambda units: layers.Dense(units,activation='relu')
 
-def get_model_summary(model):
+def get_model_summary(model):               #function to convert none type model.sunnmary() to string to store in external file
     stream = io.StringIO()
     model.summary(print_fn=lambda x: stream.write(x + '\n'))
     summary_string = stream.getvalue()
@@ -23,9 +23,9 @@ def train_model(field):
     train_path=cmdline_params[f'df_train_{field}']
 
     if field=='yop':
-        field_encoding=field[0].upper()+field[1]+field[2].upper()+'_Encoded'  #from title/author to Title/Author_Encoded
+        field_encoding=field[0].upper()+field[1]+field[2].upper()+'_Encoded'  #title/author => Title/Author_Encoded
     else:
-        field_encoding=field[0].upper()+field[1:]+'_Encoded'            #from yop to YoP_Encoded
+        field_encoding=field[0].upper()+field[1:]+'_Encoded'            # yop => YoP_Encoded
 
     X_train=pd.read_csv(train_path)
 
@@ -43,15 +43,15 @@ def train_model(field):
     print(f"1s : {len(X_train1)}\n\n")
 
 
-    X_train1=pd.concat([X_train1]*20, ignore_index=True)
-    X_train0=X_train0.sample(frac=0.4,random_state=7)
+    X_train1=pd.concat([X_train1]*20, ignore_index=True)     #Oversampling by 20 times the number of rows having encoding 1
+    X_train0=X_train0.sample(frac=0.4,random_state=7)         #Undersampling by taking only 40% of rows having encoding 0
 
     print(f"0s after undersampling: {len(X_train0)}")
     print(f"1s after undersampling: {len(X_train1)}")
 
 
-    X_train=pd.concat([X_train0,X_train1],ignore_index=True)
-    X_train = X_train.sample(frac=1).reset_index(drop=True)
+    X_train=pd.concat([X_train0,X_train1],ignore_index=True)           #Concatenating 0-label rows and 1-label rows
+    X_train = X_train.sample(frac=1).reset_index(drop=True)             #randomizing whole dataframe 
 
     
     negs=len(X_train[X_train[f'{field_encoding}']==0])
@@ -100,7 +100,7 @@ def train_model(field):
 
     model.compile(loss=tf.keras.losses.BinaryCrossentropy(),optimizer=keras.optimizers.Adam(learning_rate=lr),metrics=["accuracy"])
 
-    history=model.fit(X_train,y_train,batch_size=BS,epochs=EPOCHS,verbose=1,class_weight=class_weight)
+    history=model.fit(X_train,y_train,batch_size=BS,epochs=EPOCHS,verbose=1,class_weight=class_weight)  #training with class_weights to counteract class imbalance further
 
     model_save_choice = str(sys.argv[2])
 
@@ -108,7 +108,7 @@ def train_model(field):
 
         model_name=str(sys.argv[3])
         model_name=f"{field}_{model_name}"
-        model.save(model_name,save_format='tf')
+        model.save(model_name,save_format='tf')    #for tf version > 2
 
         print(f"Model Saved as {model_name}")
 

@@ -20,7 +20,7 @@ def preds(field,df):
     y_preds = model.predict(data)
     
     with open('train_thresholds.pkl','rb') as f:
-        thresholds=pickle.load(f)
+        thresholds=pickle.load(f)                            #using best thresholds generated during Train Pipeline predictions
     predicted_categories = np.where(y_preds > thresholds[f'{field}'], 1, 0)
     
     df[f'{field}_preds']=predicted_categories

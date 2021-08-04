@@ -44,16 +44,17 @@ def prediction_stats(field,train_or_test):
     # locate the index of the largest g-mean
     ix = np.argmax(gmeans)
     print('Best Threshold=%f, G-Mean=%.3f' % (thresholds[ix], gmeans[ix]))
-    # plot the roc curve for the model
+    
+ 
     # plt.plot([0,1], [0,1], linestyle='--', label='No Skill')
     # plt.plot(fpr, tpr, marker='.', label='ANN')
     # plt.scatter(fpr[ix], tpr[ix], marker='o', color='black', label='Best')
-    # # axis labels
     # plt.xlabel('False Positive Rate')
     # plt.ylabel('True Positive Rate')
     # plt.legend()
-    # # show the plot
-    # plt.show()
+    # plt.show()                
+
+    #uncommenting above lines will generate roc plots
 
     best_thresh=thresholds[ix]
     predicted_categories = np.where(y_preds > best_thresh, 1, 0)
@@ -97,7 +98,7 @@ def prediction_stats(field,train_or_test):
     return best_thresh,str(conf_matrix),class_report
 
 
-def logs(fields,train_or_test,thresholds,conf_matrices,class_reports,datetime):
+def logs(fields,train_or_test,thresholds,conf_matrices,class_reports,datetime):  #saving logs 
 
     f=open(f'{train_or_test} {datetime}.txt','w')
    
@@ -113,7 +114,7 @@ def logs(fields,train_or_test,thresholds,conf_matrices,class_reports,datetime):
 
     f.close()
 
-    with open(f'{field}_thresholds.pkl', 'wb') as f: 
+    with open(f'{field}_thresholds.pkl', 'wb') as f:       #saving best thresholds for reuse in test_pipeline
         pickle.dump(thresholds, f)
 
 

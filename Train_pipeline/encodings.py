@@ -18,7 +18,7 @@ if __name__=="__main__":
     start_t=time.perf_counter()
 
     cmdline_params = {rows[0]:rows[1] for rows in reader(open(sys.argv[1], 'r'))}
-    # df=input("Enter df path:\t")
+
     df=pd.read_csv(cmdline_params['raw_dataset'])
 
     print(df.shape)
@@ -28,13 +28,13 @@ if __name__=="__main__":
     print(df.shape)
     
 
-    temp_df = df.copy(deep=True)
+    temp_df = df.copy(deep=True)              #to prevent creation of duplicate encoded axes later
 
     names=['Author','Title','YoP']
 
     create_encodings=functools.partial(encoding_creation,temp_df=temp_df)
 
-    with concurrent.futures.ProcessPoolExecutor() as executor:
+    with concurrent.futures.ProcessPoolExecutor() as executor:              #Processing author, title, yop dataframes simulatenously
         result_dfs=[executor.submit(encoding_creation,temp_df,name) for name in names]
 
     print(result_dfs)

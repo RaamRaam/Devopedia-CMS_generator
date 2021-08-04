@@ -8,14 +8,14 @@ import random
 
 def train_test_split(df,df_name):
     fnames=list(df.fname.unique())
-    test_split=random.sample(fnames,587)
+    test_split=random.sample(fnames,587)           # Randomly choose 587 files 
 
-    df_test= df[df.fname.isin(test_split)]
+    df_test= df[df.fname.isin(test_split)]         # Create subset of dataframe w.r.t to test_split having 587 random files
     df_test.reset_index(inplace=True,drop=True)
     df_test.to_csv(f'test_{df_name}',index=False)
     print('Test dataframe created!')
 
-    df_train=df[~df.fname.isin(test_split)]
+    df_train=df[~df.fname.isin(test_split)]          #Dataframe with rest of the files
     df_train.reset_index(inplace=True,drop=True)
     df_train.to_csv(f'train_{df_name}',index=False)
     print('Train dataframe created!')

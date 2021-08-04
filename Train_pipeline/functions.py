@@ -54,7 +54,6 @@ def get_encoded_df(df,field):
     df2=df1[~df1['fname'].isin(list(df1[df1[field+'_Encoded']==1].fname.unique()))]
 
     if field=='YoP':
-        print('inside YOP')
         df2['YoP'+'_Encoded']=df2[['text','YoP']].apply(exact_label_yop, axis=1)
     else:
         df2[field+'_Encoded']=df2[['text',field]].apply(exact_label, axis=1)

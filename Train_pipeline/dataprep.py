@@ -63,22 +63,3 @@ if __name__ == "__main__":
 
     print(f"Program ran for {(end_time-start_time)/60} minutes")
 
-
-    # print('processing Author Encodings ...')
-    # author_df=get_encoded_df(final_df,'Author')
-    
-    # print('processing Title Encodings ...')
-    # title_df=get_encoded_df(final_df,'Title')
-    
-    # print('processing YoP Encodings ...')
-    # yop_df=get_encoded_df(final_df,'YoP')
-    
-    
-    # author_df.to_csv('author.csv')
-    # title_df.to_csv('title.csv')
-    # yop_df.to_csv('yop.csv')
-    
-    # data_frames=[final_df,author_df[['index','fname','Author_Encoded']],title_df[['index','fname','Title_Encoded']],yop_df[['index','fname','YoP_Encoded']]]
-
-    # reduce(lambda  left,right: pd.merge(left,right,on=['index','fname'],how='left'), data_frames).to_csv('dataset.csv',index=False)
-    
