@@ -26,6 +26,18 @@ def preds(field,df):
     df[f'{field}_preds']=predicted_categories
     df[f'{field}_pred_probs']=y_preds
 
+    if field=='author':
+        with open('author_stopwords.pkl','rb') as f:
+            stopwords=pickle.load(f)
+
+        text_to_vector = lambda el: re.compile(r'[^\W]+\b').findall(str(el).lower())
+
+        for index,i in df.iterrows():
+            token_list=text_to_vector(i['text'])
+            if any(item in stopwords for item in token_list) or re.sub(' ','',i['text']).isdigit():
+                df.loc[index,f'{field}_preds']=0
+                df.loc[index,f'{field}_pred_probs']=0
+
     # if field=='author':
     #     df_ner=df[df.author_preds==1]
     #     x=df_ner['text'].apply(lambda x : 1 if spacy_ner(x) else 0)

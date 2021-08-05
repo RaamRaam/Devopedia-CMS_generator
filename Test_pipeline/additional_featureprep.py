@@ -2,7 +2,7 @@ import pickle
 from libraries import *
 
 log_index_weightage=lambda x: 1/(math.exp(math.log(x+1,100)))
-tag_weights_update=lambda x: ((x*100)**2)/100
+tag_weights_update=lambda x: ((x*100)**2)/10000
 
 def add_features(field,df):
     with open(f'{field}_tags_info.pkl','rb') as f:  
