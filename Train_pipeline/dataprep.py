@@ -7,6 +7,13 @@ warnings.filterwarnings("ignore")
 if __name__ == "__main__":
 
     start_time=time.perf_counter()
+
+    folder_path='Train_preprocess'
+
+    try:
+        os.mkdir(folder_path)
+    except:
+        pass
     
     cmdline_params = {rows[0]:rows[1] for rows in reader(open(sys.argv[1], 'r'))}
     dp=dataprep(cmdline_params)
@@ -23,7 +30,7 @@ if __name__ == "__main__":
     df['detail2']=df['text'].apply(detail2)
     df=df[['fname','Author', 'YoP', 'Title', 'detail1', 'detail2']]
 
-    df.to_csv('files_and_references.csv',index=False)
+    df.to_csv(os.path.join(folder_path,'files_and_references.csv'),index=False)
     print('Files and references dataset created!\n\n')
     
 
@@ -55,7 +62,8 @@ if __name__ == "__main__":
         
     final_df=final_df[final_df.text.notnull()]
 
-    final_df.to_csv('raw_dataset.csv',index=False)
+    
+    final_df.to_csv(os.path.join(folder_path,'raw_dataset.csv'),index=False)
 
     print(final_df.info())
 

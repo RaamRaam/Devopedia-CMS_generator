@@ -89,7 +89,8 @@ def train_model(field):
     print(model.summary())
     model_summary_string = get_model_summary(model)
 
-    with open("Model_summary.txt","w") as f:
+    folder_path='Models'
+    with open(os.path.join(folder_path,"Model_summary.txt"),"w") as f:
         f.write(model_summary_string)
 
     #-------------------------------------------------------Model training--------------------------------------------------------
@@ -104,11 +105,11 @@ def train_model(field):
 
     model_save_choice = str(sys.argv[2])
 
-    if model_save_choice=='yes':
+    if model_save_choice=='save':
 
         model_name=str(sys.argv[3])
         model_name=f"{field}_{model_name}"
-        model.save(model_name,save_format='tf')    #for tf version > 2
+        model.save(os.path.join(folder_path,model_name),save_format='tf')    #for tf version > 2
 
         print(f"Model Saved as {model_name}")
 
@@ -121,6 +122,11 @@ def train_model(field):
 if __name__ == "__main__":
 
     start_t=time.perf_counter()
+
+    try:
+        os.mkdir('Models')
+    except:
+        pass
 
     fields=['author','title','yop']
     for field in fields:

@@ -57,15 +57,15 @@ def aggregate(field,train_or_test,criterion):
 
     df_all=cosine_simi(df_all,field)
 
-    df_all.to_csv(f"Aggregated_{field}_{train_or_test}_{criterion}.csv",index=False)
+    df_all.to_csv(os.path.join(folder_path,f"Aggregated_{field}_{train_or_test}_{criterion}.csv"),index=False)
 
 
     
 
 if __name__=='__main__':
     print("Running aggregated_cosine_similarity.py...")
-
     start_t=time.perf_counter()
+    folder_path='Train_diagnostics'
     cmdline_params = {rows[0]:rows[1] for rows in reader(open(sys.argv[1], 'r'))}
     fields=['Author','Title','YoP']
     for field in fields:

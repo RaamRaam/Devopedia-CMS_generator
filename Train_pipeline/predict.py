@@ -30,8 +30,10 @@ def prediction_stats(field,train_or_test):
                 'year_presence','Tag_weights',f'{field_encoding}']]
     y_test=X_test.pop(f'{field_encoding}')
 
+
+    models_folder_path='Models'
     model_path=str(sys.argv[2])
-    model=load_model(f'{field}_{model_path}')
+    model=load_model(os.path.join(models_folder_path,f'{field}_{model_path}'))
 
     print(f"Evaluation on {train_or_test} set:")
     model.evaluate(X_test,y_test)
@@ -81,7 +83,8 @@ def prediction_stats(field,train_or_test):
     #     del df_preds['Preds_ner']
 
     df_preds2=df_preds.loc[(df_preds.Ground_truths==1) | (df_preds.Predictions==1)]  
-    df_preds2.to_csv(f"{field}_{train_or_test}_Prediction_diagnostics.csv",index=False)
+
+    df_preds2.to_csv(os.path.join(folder_path,f"{field}_{train_or_test}_Prediction_diagnostics.csv"),index=False)
     print(f"\n{field}_{train_or_test}_Prediction diagnostics created and saved!\n")
 
 
@@ -100,7 +103,7 @@ def prediction_stats(field,train_or_test):
 
 def logs(fields,train_or_test,thresholds,conf_matrices,class_reports,datetime):  #saving logs 
 
-    f=open(f'{train_or_test} {datetime}.txt','w')
+    f=open(os.path.join(folder_path,f'{train_or_test} {datetime}.txt'),'w')
    
     for field in fields:
         f.write(field)
@@ -114,13 +117,19 @@ def logs(fields,train_or_test,thresholds,conf_matrices,class_reports,datetime): 
 
     f.close()
 
-    with open(f'{field}_thresholds.pkl', 'wb') as f:       #saving best thresholds for reuse in test_pipeline
+    with open(f'{train_or_test}_thresholds.pkl', 'wb') as f:       #saving best thresholds for reuse in test_pipeline
         pickle.dump(thresholds, f)
 
 
 
 
 if __name__ == "__main__":
+
+    folder_path='Train_diagnostics'
+    try:
+        os.mkdir(folder_path)
+    except:
+        pass
 
     print("\npredcit.py running...")
     start_t=time.perf_counter()

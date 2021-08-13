@@ -2,11 +2,11 @@ import os
 import sys
 import time
 
-if sys.argv[1]=='url2refstring':
+if sys.argv[1]=='predict':
     url=sys.argv[2]
     model=sys.argv[3]
     py_fname=f"url2ref_string.py {url} {model}"
-    path=os.path.join('Test_pipeline',py_fname)
+    path=os.path.join('Prediction_pipeline',py_fname)
     os.system(f"python {path}")
 
 elif sys.argv[1]=='preprocess':
@@ -28,7 +28,7 @@ elif sys.argv[1]=='preprocess':
         py5=os.path.join(pipeline_path, f"additional_features_prep.py {inputs}")
         py_files=[py1,py2,py3,py4,py5]
 
-    elif train_or_test=='test':
+    elif train_or_test=='prediction':
         url=sys.argv[4]
         py1=os.path.join(pipeline_path,f"url2file.py {url}")
         py2=os.path.join(pipeline_path,f"dataprep.py {inputs}")
@@ -37,7 +37,8 @@ elif sys.argv[1]=='preprocess':
         py_files=[py1,py2,py3,py4]
     
     else:
-        print("Invalid choice!!")
+        print("Invalid choice!")
+        sys.exit() 
 
     
     for py_fname in py_files:
@@ -54,7 +55,7 @@ elif sys.argv[1]=='train':
 
     model_save_choice=sys.argv[3]
 
-    if model_save_choice=='yes':
+    if model_save_choice=='save':
         model_name=sys.argv[4]
         path=os.path.join("train_pipeline",f"train.py {inputs} {model_save_choice} {model_name}")
         os.system(f'python {path}')
@@ -62,8 +63,6 @@ elif sys.argv[1]=='train':
     else:
         path=os.path.join("train_pipeline",f"train.py {inputs} {model_save_choice}")
         os.system(f'python {path}')
-
-    
 
     
 
@@ -85,7 +84,7 @@ elif sys.argv[1]=='postprocess':
 
         py_files=[py1,py2,py3]
 
-    elif train_or_test=='test':
+    elif train_or_test=='prediction':
         py1=os.path.join(pipeline_path, f"predict.py {inputs} {model_name}")
         py2=os.path.join(pipeline_path, f"generate_ref_strings.py {inputs}")
 
@@ -102,6 +101,11 @@ elif sys.argv[1]=='postprocess':
     end_t=time.perf_counter()
 
     print(f"{train_or_test} postprocessing done in {(end_t-start_t)/60} minutes.")
+
+else:
+ 	print("Invalid Choice!")
+ 	sys.exit() 
+
 
 
 

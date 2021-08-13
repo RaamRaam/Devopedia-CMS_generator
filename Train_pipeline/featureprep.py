@@ -86,7 +86,8 @@ def featureprep_func(field):
     print(f"{field}")
     df=pd.read_csv(cmdline_params[f'{field}_encoded'])
     df=add_columns(df)
-    df.to_csv(f'features_{field}_encoded.csv',index=False)
+    folder_path='Train_preprocess'
+    df.to_csv(os.path.join(folder_path,f'features_{field}_encoded.csv'),index=False)
     print(f"\nFeature columns added for {field}!\n")
 
 

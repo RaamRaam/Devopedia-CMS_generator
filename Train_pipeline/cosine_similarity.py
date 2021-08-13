@@ -45,7 +45,7 @@ def top_three_preds_indices(field,train_or_test):
 
     df_all=cosine_simi(df_all,field)      #calcualte cosine similarities
 
-    df_all.to_csv(f'{field}_{train_or_test}_indices_similarities.csv',index=False)          
+    df_all.to_csv(os.path.join(folder_path,f'{field}_{train_or_test}_indices_similarities.csv'),index=False)
 
 
 def top_three_preds_probs(field,train_or_test):
@@ -74,16 +74,17 @@ def top_three_preds_probs(field,train_or_test):
  
     df_all=cosine_simi(df_all,field)       #calcualte cosine similarities
 
-    df_all.to_csv(f'{field}_{train_or_test}_probs_similarities.csv',index=False)
+    df_all.to_csv(os.path.join(folder_path,f'{field}_{train_or_test}_probs_similarities.csv'),index=False)
 
     
 
 
 if __name__=="__main__":
 
+    
     start_t=time.perf_counter()
     print("Running cosine_similarities.py...")
-
+    folder_path='Train_diagnostics'
     cmdline_params = {rows[0]:rows[1] for rows in reader(open(sys.argv[1], 'r'))}
 
     fields=['Author','Title','YoP']
