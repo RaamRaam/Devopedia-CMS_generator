@@ -1,5 +1,5 @@
-file,file.htm
-file_df,file_tag_text.csv
-file_df_features,file_df_features.csv
+file,Prediction_outputs\file.htm
+file_df,Prediction_outputs\file_tag_text.csv
+file_df_features,Prediction_outputs\file_df_features.csv
 tags_info,tags_info.pkl
-preds_file,Predictions.csv
+preds_file,Prediction_outputs\Predictions.csv
