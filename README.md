@@ -61,7 +61,7 @@ We attempt to predict the content in bold given URL
 4. Build Features
 
    1. Number of tokens in text
-   2. Weights for Tags, say, if title appears in <h1> tag 10% of the times, the weight for <h1> is 0.10
+   2. Weights for Tags, say, if title appears in 'h1' tag 10% of the times, the weight for 'h1' is 0.10
    3. number of commas as percentage of number of tokens - this is useful to find Author
    4. number of tokens have first letter as Capital letter
    5. index(position) weightage of Tag/content.  the earlier the tag/content, the higher weightage is assigned
