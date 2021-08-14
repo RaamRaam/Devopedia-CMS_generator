@@ -1,140 +1,151 @@
-# Devopedia-CMS_generator
+# Devopedia.org
 
-Given a URL, parse the content and generate a reference string in Chicago Manual of Style (CMS) format.
+# Chicago Manual Style Citation String
 
-# Master Commands to use pipelines
+For Devopedia Articles the citation adapted is Chicago style.  More on the style is in the following link
 
-## To directly input an URL and get predictions
+https://www.citationmachine.net/chicago
+
+
+
+## Objective
+
+In this project we have aimed to construct the citation for website given the URL.  The examples are in the following link
+
+https://www.chicagomanualofstyle.org/tools_citationguide/citation-guide-1.html#cg-website
+
+The standard format is as follows
+
+**Author, year_of_publishing, Title**, granular time details, granular content details
+
+We attempt to predict the content in bold given URL
+
+
+
+## Data
+
+- Total Devopedia Articles -  About 10K
+
+- Web Site Referenced Articles - About 7K
+
+- Used Articles
+  -For Authors- 5064 files
+  -For Titles- 6220 files
+  -For YoPs- 3532 files
+
+- Train Articles
+  -For Authors- 4477 files
+  -For Titles- 5633 files 
+  -For YoPs- 2945 files
+
+- Test Articles -587 files for each
+
+- Challenges:
+
+  - Plenty of .htm files had no relevant content (for example, just script and meta tags)
+
+  - Some .htm files did not support 'utf-8' or 'iso' encodings (perhaps in another language script)
+
+  - Those .htm files which did not contain even a single Title/Author/YoP encoding label as 1 for all its extracted tag-text rows were not used in their respective field datasets
+
+    
+
+## Methodology
+
+1. Crawl the URL
+
+2. Extract Tag and Content
+
+3. Label the Tag and Content with Author/YoP/Title if the content has Author/YoP/Title respectively
+
+4. Build Features
+
+   1. Number of tokens in text
+   2. Weights for Tags, say, if title appears in <h1> tag 10% of the times, the weight for <h1> is 0.10
+   3. number of commas as percentage of number of tokens - this is useful to find Author
+   4. number of tokens have first letter as Capital letter
+   5. index(position) weightage of Tag/content.  the earlier the tag/content, the higher weightage is assigned
+   6. if the text contains year(4 digit number with first digit either 1 or 0)
+
+5. Split the URLs(and its content) into Train and Test
+
+6. Train distinct models for Author/Title/YoP by up-sampling/down-sampling
+
+7. Since the probable tags are predicted some post processing is done to extract Author/Title/YoP
+
+8. The dataset is imbalanced because only fewer tags can be labelled as Author/Title/YoP.  
+
+   Hence False negatives are minimized and False positives are compromised. The idea is to increase recall and compromise on precision
+
+   We publish top 3 predictions and expect the exact predictions to be part of the top 3
+
+   Reference string is constructed
+
+   
+
+
+
+# Process Document
+
+## Install requirements
+
+```
+pip install -r requirements.txt
+```
+
+## Training
+
+- Modify the train_inputs.csv file to configure 
+- html_path - location where crawled html files are present
+- articles - location where train data is made available in json format
+- meta_data - location where meta data is present
+- you can also configure number of layers, number of nodes in each layer, learning rate, number of epoch and batch size towards the end of the file
+- The output files are named in the configuration.  please leave them as it is to avoid errors
+
+```
+python commands.py preprocess train inputs.csv (files_batch_size)
+python commands.py train inputs.csv save (model_name)
+python commands.py postprocess train inputs.csv (model_name)
+```
+- The preprocess will generate files in Train_preprocess folder
+- The model files  will be generated in the root folder as .pkl files
+- The postprocess will generate files Train_diagnostics folder
+
+
+
+## Diagnostics
+
+Since we ignore false positives on purpose and depend on top 3 predictions post processing a custom metric(based on similarity with original ref string) is worked out to arrive at accuracy 
+
+This needs further attention
+
+
+
+
+
+## To get predictions by giving URL as input
 
 ```
 python commands.py predict (url) (model_name)
 ```
 
+- The URL inputted is crawled and saved as file.htm in the Prediction_outputs folder
+- This results are displayed in screen and files will be present in Prediction_outputs folder
+- The results are also stored in .txt file in the Prediction_outputs folder
 
-## For Preprocessing
-
-### Preprocessing (Train pipeline)
-
-```
-python commands.py preprocess train inputs.csv (files_batch_size)
-```
-### Preprocessing (Prediction pipeline)
-```
-python commands.py preprocess prediction inputs.csv (url)
-```
-
-
-## For Training
-
-### Train and Save model
-```
-python commands.py train inputs.csv save (model_name)
-```
-### Train without saving model
-```
-python commands.py train inputs.csv no
-```
-
-
-## For Postprocessing
-
-### Postprocessing (Train pipeline)
-```
-python commands.py postprocess train inputs.csv (model_name)
-```
-### Postprocessing (Prediction pipeline)
-```
-python commands.py postprocess prediction inputs.csv (model_name)
-```
-
-
-
-<hr>
-
-
-### Train_Pipeline
+#### Example
 
 ```
-python dataprep.py inputs.csv (batch size for processing files)
+python commands.py predict https://sunscrapers.com/blog/10-django-packages-you-should-know/ ANN
 ```
-Creates a csv dataframe (raw_dataset.csv) having tags and text extracted along with corresponding author, title and yop labels
 
-```
-python encodings.py inputs.csv
-```
-Creates 3 dataframes (author, title, yop) from raw_dataset.csv having respective encodings 
+# Further Scope
 
-```
-python featureprep.py inputs.csv
-```
-Extracts relevant features from the text column for input into the neural network
-
-```
-python split.py inputs.csv
-```
-File leverl train-test split (currently 587 files randomly chosen for test set)
-
-```
-python additional_features_prep.py inputs.csv
-```
-Adding more relevant features (calculating tag_weights, and mathematical operation on index)
-
-```
-python train.py inputs.csv save ANN
-```
-Feeding input features into the neural net and training the 3 separate models (for author, title, yop of course)
-
-```
-python predict.py inputs.csv ANN
-```
-Generating prediction diagnostic csv files using the trained models
-
-```
-python cosine_similarity.py inputs.csv
-```
-Generating csv files having cosine_similarity score between author, title, yop prediction of each file based on
-- Top 3 indices
-- Top 3 prediction probabilities
-
-```
-python aggregated_cosine_similarity.py inputs.csv
-```
-Aggregating cosine similarity csv files 
-
-
-
-<hr>
-
-### Prediction_Pipeline
-
-```
-python url2file.py (url)
-```
-Generatin and saving html file of the input URL 
-
-```
-python dataprep.py inputs.csv
-```
-Extracting tag and text from html file using BeautifulSoup
-
-```
-python featureprep.py inputs.csv
-```
-Extracting same features as in Train pipeline for input into the neural network
-
-```
-python additional_featureprep.py inputs.csv
-```
-Adding more relevant features (using tag_weights calculated in Train pipeline,  and mathematical operation on index)
-
-```
-python predict.py inputs.csv ANN
-```
-Feeding features into the trained models and generating predictions
-
-```
-python generate_ref_strings.py inputs.csv
-```
-Generating top 3 Titles, Authors, YoPs as per predictions based on
-- Indices
-- Max Probabilties
+- Reference String construction for PDFs/Text files
+- Eliminate redundant code for train and predict
+- A robust mechanism to define accuracy
+- Model file is big and takes long time to load at the time of prediction
+- Exploring NER's to narrow down predictions yielding accuracy. 
+  - We attempted, but it slows down training/prediction
+- Improve features - Tag Weight and index Weight - investigate data and innovate math to represent tag and index with appropriate weights
+- Constructing Reference String in case of multiple authors
