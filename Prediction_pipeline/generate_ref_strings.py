@@ -1,11 +1,13 @@
-from libraries import pd,reader,sys,re
+from libraries import pd,reader,sys,re,os
 
 def ref_string_generate(author,title,yop):
     return author+'. '+yop+'. "'+title+'"'
 
-def print_entities(field_list):
+def print_entities(field_list,f):
     for i in field_list:
         print(i)
+        f.write(i)
+        f.write("\n")
 
 
 def entities_extraction(df_author,df_title,df_yop):
@@ -22,14 +24,22 @@ def entities_extraction(df_author,df_title,df_yop):
     remove_suffix=lambda el: re.search(r'([^|-]+)',el).group().strip()     # Considering part of text before - or |
     title_preds=list(map(remove_suffix,title_preds))
 
+    folder_path='Prediction_outputs'
+    f=open(os.path.join(folder_path,'Predicted_results.txt'),'w',encoding='utf-8')
+    f.write("Predicted Results:\n\n\n")
+
 
     print("\nBased on top 3 indices:\n\n")
+    f.write("\nBased on top 3 indices:\n\n")
     print("Authors:\n")
-    print_entities(author_preds)
+    f.write("Authors:\n\n")
+    print_entities(author_preds,f)
     print("\n\nTitles:\n")
-    print_entities(title_preds)
+    f.write("\n\nTitles:\n\n")
+    print_entities(title_preds,f)
     print("\n\nYoPs:\n")
-    print_entities(yop_preds)
+    f.write("\n\nYoPs:\n\n")
+    print_entities(yop_preds,f)
 
 
     range_top=min(len(author_preds),len(title_preds),len(yop_preds))
@@ -39,7 +49,10 @@ def entities_extraction(df_author,df_title,df_yop):
         ref_strings_top3_indices.append(ref_string_generate(author_preds[i],title_preds[i],yop_preds[i]))
 
     print("\n\n Ref_strings from top 3 indices :\n")
-    print_entities(ref_strings_top3_indices)
+    f.write("\n\n Ref_strings from top 3 indices :\n\n")
+    print_entities(ref_strings_top3_indices,f)
+    print("\n\n")
+    f.write("\n\n")
 
     df_author=df_author.sort_values(by = 'author_pred_probs',ascending=False)
     df_title=df_title.sort_values(by = 'title_pred_probs',ascending=False)
@@ -60,14 +73,20 @@ def entities_extraction(df_author,df_title,df_yop):
 
 
     print('-'*200)
-
+    f.write('-'*200)
+    print("\n\n")
+    f.write('\n\n')
     print("Based on top 3 prediction probabilities:\n\n")
+    f.write("Based on top 3 prediction probabilities:\n\n")
     print("Authors:\n")
-    print_entities(author_preds)
+    f.write("Authors:\n\n")
+    print_entities(author_preds,f)
     print("\n\nTitles:\n")
-    print_entities(title_preds)
+    f.write("\n\nTitles:\n\n")
+    print_entities(title_preds,f)
     print("\n\nYoPs:\n")
-    print_entities(yop_preds)
+    f.write("\n\nYoPs:\n\n")
+    print_entities(yop_preds,f)
 
     range_top=min(len(author_preds),len(title_preds),len(yop_preds))
 
@@ -76,7 +95,10 @@ def entities_extraction(df_author,df_title,df_yop):
         ref_strings_top3_probs.append(ref_string_generate(author_preds[i],title_preds[i],yop_preds[i]))
 
     print("\n\n Ref_strings from top 3 predcition_probabilities :\n")
-    print_entities(ref_strings_top3_probs)
+    f.write("\n\n Ref_strings from top 3 predcition_probabilities :\n\n")
+    print_entities(ref_strings_top3_probs,f)
+
+    f.close()
 
 
 

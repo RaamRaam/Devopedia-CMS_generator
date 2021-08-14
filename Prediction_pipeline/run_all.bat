@@ -1,4 +1,4 @@
-python url2file.py https://medium.com/analytics-vidhya/seq2seq-abstractive-summarization-using-lstm-and-attention-mechanism-code-da2e9c439711
+python url2file.py https://medium.com/@shivamrawat_756/how-to-prevent-google-colab-from-disconnecting-717b88a128c0
 python dataprep.py inputs.csv
 python featureprep.py inputs.csv
 python additional_featureprep.py inputs.csv

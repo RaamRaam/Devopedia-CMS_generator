@@ -10,13 +10,17 @@ warnings.filterwarnings("ignore")
 if __name__=="__main__":
 
     start_t=time.perf_counter()
-
+    folder_path="Prediction_outputs"
+    try:
+        os.mkdir(folder_path)
+    except:
+        pass
     #---------------------------------------------url2file---------------------------------------------
 
     url=str(sys.argv[1])
     source=requests.get(url).text
     try:
-        with open('file.htm','w',encoding='utf8') as f:
+        with open(os.path.join(folder_path,'file.htm'),'w',encoding='utf8') as f:
             f.write(source)
     except:
         with open('file.htm','w',encoding='iso-8859-1') as f:
@@ -36,7 +40,7 @@ if __name__=="__main__":
                                           )
                                 ).drop(['fname','text4dup'], axis = 1)
 
-    file='file.htm'
+    file=os.path.join(folder_path,'file.htm')
     df=get_df(file)
     print(f"Dataframe of shape {df.shape} created.")
 
@@ -51,6 +55,8 @@ if __name__=="__main__":
     #------------------------------------------------prediction and ref_string generation----------------------------------------------
 
     _=[preds(field,df) for field in fields]
+
+    df.to_csv(os.path.join(folder_path,"Prediction_diagnostics.csv"),index=False)
 
     df=df[['index','tag','text',
             'author_preds','author_pred_probs',
