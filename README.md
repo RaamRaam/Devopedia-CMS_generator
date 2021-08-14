@@ -29,11 +29,13 @@ We attempt to predict the content in bold given URL
 - Web Site Referenced Articles - About 7K
 
 - Used Articles
+
   -For Authors- 5064 files
   -For Titles- 6220 files
   -For YoPs- 3532 files
 
 - Train Articles
+
   -For Authors- 4477 files
   -For Titles- 5633 files 
   -For YoPs- 2945 files
