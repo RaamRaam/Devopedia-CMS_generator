@@ -129,9 +129,9 @@ This needs further attention
 python commands.py predict (url) (model_name)
 ```
 
-- The URL inputted is crawled and saved as file.htm in the Prediction_outputs folder
+- The URL inputted is crawled and saved as file.htm in the Prediction_outputs folder (which is created if not already present in the root direcotry)
 - This results are displayed in screen and files will be present in Prediction_outputs folder
-- The results are also stored in .txt file in the Prediction_outputs folder
+- The results are also stored in Prediction_results.txt file in the Prediction_outputs folder
 
 #### Example
 
